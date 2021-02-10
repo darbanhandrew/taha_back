@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
+from datetime import timedelta
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -39,8 +40,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'graphene_django',
     'tahaApp.apps.TahaappConfig',
-    'graphql_auth',
-    'graphql_jwt.refresh_token.apps.RefreshTokenConfig'
+    'graphql_jwt.refresh_token.apps.RefreshTokenConfig',
 ]
 SITE_ID = 1
 MIDDLEWARE = [
@@ -81,7 +81,7 @@ WSGI_APPLICATION = 'taha.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
@@ -126,32 +126,15 @@ GRAPHENE = {
     "SCHEMA": "taha.schema.schema",
     'MIDDLEWARE': [
         'graphql_jwt.middleware.JSONWebTokenMiddleware',
-    ],
+    ]
 }
 AUTHENTICATION_BACKENDS = [
-    "graphql_jwt.backends.JSONWebTokenBackend",
+    'graphql_jwt.backends.JSONWebTokenBackend',
     "django.contrib.auth.backends.ModelBackend",
-    "graphql_auth.backends.GraphQLAuthBackend",
 ]
-
 GRAPHQL_JWT = {
-    "JWT_VERIFY_EXPIRATION": True,
+    'JWT_VERIFY_EXPIRATION': True,
     'JWT_LONG_RUNNING_REFRESH_TOKEN': True,
-    "JWT_ALLOW_ANY_CLASSES": [
-        "graphql_auth.mutations.Register",
-        "graphql_auth.mutations.VerifyAccount",
-        "graphql_auth.mutations.ResendActivationEmail",
-        "graphql_auth.mutations.SendPasswordResetEmail",
-        "graphql_auth.mutations.PasswordReset",
-        "graphql_auth.mutations.ObtainJSONWebToken",
-        "graphql_auth.mutations.VerifyToken",
-        "graphql_auth.mutations.RefreshToken",
-        "graphql_auth.mutations.RevokeToken",
-        "graphql_auth.mutations.VerifySecondaryEmail",
-    ],
-
+    'JWT_EXPIRATION_DELTA': timedelta(days=365),
+    'JWT_REFRESH_EXPIRATION_DELTA': timedelta(days=7),
 }
-GRAPHQL_AUTH = {
-    'SEND_ACTIVATION_EMAIL': False,
-}
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"

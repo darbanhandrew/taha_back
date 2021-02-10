@@ -1,9 +1,10 @@
 import graphene
-from graphene import relay, ObjectType
+from graphene import relay, ObjectType, String
 from graphene_django import DjangoObjectType
 from graphene_django.filter import DjangoFilterConnectionField
 
 from tahaApp.models import *
+from tahaApp.wchelper import get_products
 
 
 class ShopNode(DjangoObjectType):
@@ -82,3 +83,8 @@ class TahaQuery(graphene.ObjectType):
 
     category = relay.Node.Field(CategoryNode)
     category_list = DjangoFilterConnectionField(CategoryNode)
+
+    get_product = String()
+
+    def resolve_get_product(root, info):
+        return get_products()
