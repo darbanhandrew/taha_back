@@ -1,8 +1,6 @@
 import graphene
-from tahaApp.schema import TahaQuery
-from graphene import relay, ObjectType
-from graphene_django import DjangoObjectType
-from graphene_django.filter import DjangoFilterConnectionField
+
+from tahaApp.schema import TahaQuery, TahaMutation
 import graphql_jwt
 
 
@@ -12,11 +10,14 @@ class AuthMutation(graphene.ObjectType):
     refresh_token = graphql_jwt.Refresh.Field()
 
 
-class Query(TahaQuery, graphene.ObjectType):
+class Query(
+    TahaQuery,  # Add your Query objects here
+    graphene.ObjectType
+):
     pass
 
 
-class Mutation(AuthMutation, graphene.ObjectType):
+class Mutation(AuthMutation, TahaMutation, graphene.ObjectType):
     pass
 
 

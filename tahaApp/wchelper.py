@@ -1,23 +1,25 @@
+from shlex import join
+
 from woocommerce import API
 
 from tahaApp.models import Product, Shop
 
-wcapi = API(
-    url="https://gaat.fashion",
-    consumer_key="ck_3736481ccc3e247185d42558c7d0eb94fab67a2b",
-    consumer_secret="cs_73a28ae70a6d6296dc45f835425e44e535349df0",
-    version="wc/v3"
-)
 
+def get_products(shop: Shop):
+    wcapi = API(
+        url=shop.url,
+        consumer_key=shop.consumer_key,
+        consumer_secret=shop.consumer_secret,
+        version="wc/v3"
+    )
+    fields = ["id", "name", "images", "description", "categories", "permalink",
+              "date_created_gmt", "date_modified_gmt"]
+    r = wcapi.get("products", params={"fields": {{fields | join: ","}}, "per_page": "1"})
 
-def get_products():
-    r = wcapi.get("products", params={"fields": "id,name,images", "per_page": "1"})
-    products = r.json()
-    for product in products:
-        p = Product()
-        shop = Shop.objects.first()
-        p.related_shop = shop
-        p.name = product['name']
-        p.save()
-        return p.id
+    # products = r.json()
+    # for product in products:
+    #     p = Product()
+    #     p.name = product['name']
+    #     p.save()
+    #     return p.id
     return r.json()

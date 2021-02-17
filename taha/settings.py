@@ -38,9 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'corsheaders',
-    'graphene_django',
+    'django_filters',
     'tahaApp.apps.TahaappConfig',
     'graphql_jwt.refresh_token.apps.RefreshTokenConfig',
+    'graphene_django',
 ]
 SITE_ID = 1
 MIDDLEWARE = [
@@ -81,7 +82,7 @@ WSGI_APPLICATION = 'taha.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.path.join(BASE_DIR, 'data/db.sqlite3'),
     }
 }
 
@@ -123,7 +124,7 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = "/media/"
 GRAPHENE = {
-    "SCHEMA": "taha.schema.schema",
+    "SCHEMA": os.getenv('SCHEMA_VAR', 'taha.schema.schema'),
     'MIDDLEWARE': [
         'graphql_jwt.middleware.JSONWebTokenMiddleware',
     ]

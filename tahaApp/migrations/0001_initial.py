@@ -55,7 +55,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('basemodel_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='tahaApp.basemodel')),
                 ('stock', models.IntegerField(blank=True, null=True)),
-                ('price', models.IntegerField(blank=True, null=True, validators=[django.core.validators.MinValueValidator(0)])),
+                ('price', models.IntegerField(blank=True, null=True, validators=[
+                    django.core.validators.MinValueValidator(0)])),
                 ('categories', models.ManyToManyField(to='tahaApp.Category')),
             ],
             bases=('tahaApp.basemodel',),
